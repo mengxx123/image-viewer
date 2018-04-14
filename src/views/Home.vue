@@ -1,6 +1,12 @@
 <template>
-    <my-page title="首页">
-        这是首页内容
+    <my-page title="图片浏览器">
+        <div class="img-box">
+            <ul class="image-list">
+                <li class="item" v-for="img in images">
+                    <img class="img" :src="img.url">
+                </li>
+            </ul>
+        </div>
     </my-page>
 </template>
 
@@ -8,6 +14,20 @@
     export default {
         data () {
             return {
+                images: [
+                    {
+                        url: 'https://attach.bbs.miui.com/forum/201708/02/162005d5f9vaf9rjav5j9l.jpg.thumb.jpg',
+                        title: '壁纸一'
+                    },
+                    {
+                        url: 'https://attach.bbs.miui.com/forum/201708/02/162015g8shss8wbwb8w193.jpg.thumb.jpg',
+                        title: '壁纸二'
+                    },
+                    {
+                        url: 'https://attach.bbs.miui.com/forum/201605/11/162946e5vawgobk5b3bq4h.jpg.thumb.jpg',
+                        title: '壁纸三'
+                    }
+                ],
                 page: {
                     menu: [
                         {
@@ -18,9 +38,47 @@
                     ]
                 }
             }
+        },
+        mounted() {
+            // this.images = []
+            this.initWebIntents()
+        },
+        methods: {
+            initWebIntents() {
+                if (!window.intent) {
+                    return
+                }
+                console.log(window.intent.data)
+                let data = window.intent.data
+                if (data instanceof Array) {
+                    this.images = data
+                } else {
+                    this.images = [
+                        {
+                            url: data,
+                            title: ''
+                        }
+                    ]
+                }
+            }
         }
     }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.img-box {
+    height: 100%;
+}
+.image-list {
+    height: 100%;
+    .item {
+        height: 100%;
+        margin-bottom: 24px;
+        text-align: center;
+    }
+    .img {
+        max-width: 100%;
+        max-height: 100%;
+    }
+}
 </style>

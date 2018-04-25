@@ -1,5 +1,5 @@
 <template>
-    <my-page title="图片浏览器">
+    <my-page title="图片浏览器" :page="page">
         <div class="img-box">
             <ul class="image-list">
                 <li class="item" v-for="img in images">
@@ -11,6 +11,8 @@
 </template>
 
 <script>
+    const Intent = window.Intent
+
     export default {
         data () {
             return {
@@ -32,8 +34,9 @@
                     menu: [
                         {
                             type: 'icon',
-                            icon: 'help',
-                            to: '/help'
+                            icon: 'all_inclusive',
+                            click: this.link,
+                            title: '用其他应用打开'
                         }
                     ]
                 }
@@ -60,6 +63,28 @@
                         }
                     ]
                 }
+            },
+            link() {
+                let intent = new Intent({
+                    action: 'http://webintent.yunser.com/?',
+                    type: 'image/*',
+                    data: this.images[0].url // TODO
+                })
+                navigator.startActivity(intent, data => {
+                    console.log('成功')
+                    if (data instanceof Array) {
+                        this.images = data
+                    } else {
+                        this.images = [
+                            {
+                                url: data,
+                                title: ''
+                            }
+                        ]
+                    }
+                }, data => {
+                    console.log('失败')
+                })
             }
         }
     }

@@ -1,5 +1,6 @@
 <template>
     <my-page title="图片浏览器" :page="page">
+        <div class="empty" v-if="!images.length">暂无图片</div>
         <div class="img-box">
             <ul class="image-list">
                 <li class="item" v-for="img in images">
@@ -17,18 +18,18 @@
         data () {
             return {
                 images: [
-                    {
-                        url: 'https://attach.bbs.miui.com/forum/201708/02/162005d5f9vaf9rjav5j9l.jpg.thumb.jpg',
-                        title: '壁纸一'
-                    },
-                    {
-                        url: 'https://attach.bbs.miui.com/forum/201708/02/162015g8shss8wbwb8w193.jpg.thumb.jpg',
-                        title: '壁纸二'
-                    },
-                    {
-                        url: 'https://attach.bbs.miui.com/forum/201605/11/162946e5vawgobk5b3bq4h.jpg.thumb.jpg',
-                        title: '壁纸三'
-                    }
+                    // {
+                    //     url: 'https://attach.bbs.miui.com/forum/201708/02/162005d5f9vaf9rjav5j9l.jpg.thumb.jpg',
+                    //     title: '壁纸一'
+                    // },
+                    // {
+                    //     url: 'https://attach.bbs.miui.com/forum/201708/02/162015g8shss8wbwb8w193.jpg.thumb.jpg',
+                    //     title: '壁纸二'
+                    // },
+                    // {
+                    //     url: 'https://attach.bbs.miui.com/forum/201605/11/162946e5vawgobk5b3bq4h.jpg.thumb.jpg',
+                    //     title: '壁纸三'
+                    // }
                 ],
                 page: {
                     menu: [
@@ -65,10 +66,14 @@
                 }
             },
             link() {
+                let data = null
+                if (this.images.length) {
+                    data = this.images[0].url // TODO
+                }
                 let intent = new Intent({
                     action: 'http://webintent.yunser.com/?',
                     type: 'image/*',
-                    data: this.images[0].url // TODO
+                    data: data
                 })
                 navigator.startActivity(intent, data => {
                     console.log('成功')
@@ -91,6 +96,11 @@
 </script>
 
 <style lang="scss" scoped>
+.empty {
+    padding: 80px 0;
+    color: #999;
+    text-align: center;
+}
 .img-box {
     height: 100%;
 }
